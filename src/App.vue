@@ -1,11 +1,5 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline">
-        Houston
-      </v-toolbar-title>
-    </v-toolbar>
-
+  <v-app dark>
     <v-content>
       <Home />
     </v-content>
