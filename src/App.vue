@@ -12,18 +12,14 @@
   </v-app>
 </template>
 
-<script>
-import Home from './components/Home'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import Home from '@/components/Home.vue'
 
-export default {
-  name: 'App',
+@Component({
   components: {
     Home,
   },
-  data() {
-    return {
-      //
-    }
-  },
-}
+})
+export default class App extends Vue {}
 </script>
