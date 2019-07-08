@@ -24,7 +24,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { spawn, exec } from 'child_process'
-import Session from '@/plugins/session'
+import Session from '@/store/models/session'
 
 @Component({})
 export default class Home extends Vue {
