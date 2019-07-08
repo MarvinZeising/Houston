@@ -1,74 +1,51 @@
 <template>
+
   <v-container>
     <v-layout wrap>
 
       <v-flex mb-4>
-        <v-btn @click="runPersonTests">
-          Run Person Tests
+        <v-btn @click="buildServer">
+          Build Server
         </v-btn>
         <v-btn @click="killTerminal">
           Kill Terminal
         </v-btn>
 
         <div style="background-color:#000;color:#fff; max-width:700px; min-height:300px; max-height:500px; overflow:auto;">
-          <pre>OUTPUT</pre>
-          <pre v-html="output" />
+          <pre :v-html="getLog" />
         </div>
       </v-flex>
 
     </v-layout>
   </v-container>
+
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { spawn, exec } from 'child_process'
+import Session from '@/plugins/session'
 
 @Component({})
 export default class Home extends Vue {
-  private output: string = ''
+  private session: Session | null = null
 
-  private terminal: any = null
+  private getLog() {
+    if (this.session !== null) {
+      return this.session.log
+    } else {
+      return ''
+    }
+  }
 
-  private runPersonTests() {
-    const { spawn, exec } = require('child_process')
-
-    this.output = ''
-
-    this.terminal = spawn(
-      'pwsh.exe',
-      ['-WorkingDirectory', 'C:\\src\\HuB\\Admin', '-Command', '.\\ci.cmd rundevserver'])
-
-    this.terminal.stdout.on('data', (data: any) => {
-      this.output += data
-    })
-
-    this.terminal.stderr.on('data', (data: any) => {
-      this.output += '<br>ERROR ' + data
-    })
-
-    this.terminal.on('close', (code: any) => {
-      this.output += '<br>CLOSED ' + code
-    })
-
-    this.terminal.on('disconnect', () => {
-      this.output += '<br>DISCONNECT'
-    })
-
-    this.terminal.on('exit', (code: any) => {
-      this.output += '<br>EXIT ' + code
-    })
-
-    this.terminal.on('error', (error: any) => {
-      this.output += '<br>ERROR ' + error
-    })
+  private buildServer() {
+    this.session = new Session('C:\\src\\HuB\\Admin', '.\\ci.cmd rundevserver')
   }
 
   private killTerminal() {
-    const kill = require('tree-kill')
-
-    kill(this.terminal.pid, 'SIGINT', (err: any) => {
-      this.output += '<br>TREE-KILLED ' + err
-    })
+    if (this.session !== null) {
+      this.session.kill()
+    }
   }
 }
 </script>
