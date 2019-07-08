@@ -3,17 +3,11 @@
   <v-container>
     <v-layout wrap>
 
-      <v-flex mb-4>
-        <v-btn @click="buildServer">
-          Build Server
-        </v-btn>
-        <v-btn @click="killTerminal">
-          Kill Terminal
-        </v-btn>
-
-        <div style="background-color:#000;color:#fff; max-width:700px; min-height:300px; max-height:500px; overflow:auto;">
-          <pre :v-html="getLog" />
-        </div>
+      <v-flex
+        v-for="repository in repositories"
+        :key="repository.id"
+      >
+        <h1>{{ repository.name }}</h1>
       </v-flex>
 
     </v-layout>
@@ -24,28 +18,18 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { spawn, exec } from 'child_process'
+import { getModule } from 'vuex-module-decorators'
 import Session from '@/store/models/session'
+import Repository from '@/store/models/repository'
+import RepositoryModule from '@/store/modules/repositories'
 
 @Component({})
 export default class Home extends Vue {
-  private session: Session | null = null
+  private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
 
-  private getLog() {
-    if (this.session !== null) {
-      return this.session.log
-    } else {
-      return ''
-    }
+  private get repositories(): Repository[] {
+    return this.repositoryModule.getRepositories
   }
 
-  private buildServer() {
-    this.session = new Session('C:\\src\\HuB\\Admin', '.\\ci.cmd rundevserver')
-  }
-
-  private killTerminal() {
-    if (this.session !== null) {
-      this.session.kill()
-    }
-  }
 }
 </script>
