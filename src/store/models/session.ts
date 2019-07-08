@@ -1,16 +1,6 @@
 import { spawn } from 'child_process'
 import treeKill from 'tree-kill'
-import { setServers } from 'dns'
-
-enum SessionStatus {
-  None,
-  InProgress,
-  Exiting,
-  Success,
-  Error,
-  Killed,
-  Ended,
-}
+import { SessionStatus } from '@/store/models/enums'
 
 export default class Session {
 
