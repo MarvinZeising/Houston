@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@types/uuid": "^3.4.5",
     "material-design-icons-iconfont": "^3.0.3",
     "roboto-fontface": "*",
     "tree-kill": "^1.2.1",
