@@ -13,7 +13,7 @@
       >
         <v-card>
           <v-card-title primary-title>
-            <div class="headline">{{ repository.name }}</div>
+            <h1 class="headline">{{ repository.name }}</h1>
           </v-card-title>
           <v-card-actions>
             <v-btn
@@ -23,6 +23,25 @@
               v-on:click="startSession(repository.id, task.id)"
             />
           </v-card-actions>
+          <v-card-text v-if="repository.sessions.length > 0">
+            <h2 class="subheading">Sessions</h2>
+            <v-expansion-panel>
+              <v-expansion-panel-content
+                v-for="(session, i) in repository.sessions"
+                :key="i"
+              >
+                <template v-slot:header>
+                  <div>{{ session.task.name }}</div>
+                </template>
+                <v-card>
+                  <v-btn v-on:click="session.kill()">Kill</v-btn>
+                  <v-card-text>
+                    <pre>{{ session.log }}</pre>
+                  </v-card-text>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-card-text>
         </v-card>
       </v-flex>
 
