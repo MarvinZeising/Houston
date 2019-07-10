@@ -20,6 +20,7 @@
               v-for="task in repository.tasks"
               :key="task.id"
               v-text="task.name"
+              v-on:click="startSession(repository.id, task.id)"
             />
           </v-card-actions>
         </v-card>
@@ -44,6 +45,10 @@ export default class Home extends Vue {
 
   private get repositories(): Repository[] {
     return this.repositoryModule.getRepositories
+  }
+
+  private startSession(repositoryId: string, taskId: string) {
+    this.repositoryModule.startSession({ repositoryId, taskId })
   }
 
 }

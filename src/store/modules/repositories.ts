@@ -1,4 +1,4 @@
-import { Module, VuexModule, MutationAction } from 'vuex-module-decorators'
+import { Module, VuexModule, MutationAction, Action, Mutation } from 'vuex-module-decorators'
 import Repository from '@/store/models/repository'
 import { TaskType } from '../models/enums'
 import Task from '@/store/models/task'
@@ -24,22 +24,20 @@ export default class RepositoryModule extends VuexModule {
     return { repositories: [ hub, personMesh ] }
   }
 
-  @MutationAction({ mutate: ['repositories'] })
-  public async clearRepositories() {
-    return { repositories: [] }
-  }
-
-  @MutationAction({ mutate: ['repositories'] })
-  public async startSession(repositoryId: string, taskId: string) {
-    const updated = this.repositories.map((repo: Repository) => {
+  @Action({ commit: 'setRepositories' })
+  public async startSession({ repositoryId, taskId }: { repositoryId: string, taskId: string }) {
+    return this.repositories.map((repo: Repository) => {
       if (repo.id === repositoryId) {
         const task = repo.tasks.filter((t: Task) => t.id === taskId)[0]
         repo.session = new Session(repo.path, task.command)
       }
       return repo
     })
+  }
 
-    return { repositories: updated }
+  @Mutation
+  public async setRepositories(repositories: Repository[]) {
+    this.repositories = repositories
   }
 
 }
