@@ -24,7 +24,6 @@
             />
           </v-card-actions>
           <v-card-text v-if="repository.sessions.length > 0">
-            <h2 class="subheading mb-2">Sessions</h2>
             <v-expansion-panel>
               <v-expansion-panel-content
                 v-for="(session, i) in repository.sessions"
@@ -35,18 +34,37 @@
                 <template v-slot:header>
                   <div>
                     {{ session.task.name }}
-                    <v-chip
-
-                      class="ml-4"
-                    >
-                      {{ session.status }}
-                    </v-chip>
+                    <span class="ml-3">
+                      <v-progress-circular
+                        v-if="isRunning(session.status)"
+                        color="primary"
+                        indeterminate
+                      ></v-progress-circular>
+                      <v-icon
+                        v-if="isSuccess(session.status)"
+                        color="teal"
+                      >
+                        done
+                      </v-icon>
+                      <v-icon
+                        v-if="isFailed(session.status)"
+                        color="error"
+                      >
+                        error
+                      </v-icon>
+                      <v-icon
+                        v-if="isCancelled(session.status)"
+                        color="grey"
+                      >
+                        cancel
+                      </v-icon>
+                    </span>
                   </div>
                 </template>
                 <v-card class="grey darken-4">
                   <v-btn
                     class="ma-3 red"
-                    v-if="isStatusRunning(session.status)"
+                    v-if="isRunning(session.status)"
                     v-on:click="session.kill()"
                   >
                     Kill
@@ -86,8 +104,22 @@ import { SessionStatus } from '@/store/models/enums'
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
 
-  private isStatusRunning(sessionStatus: SessionStatus): boolean {
+  private isRunning(sessionStatus: SessionStatus): boolean {
     return sessionStatus === SessionStatus.Running
+  }
+
+  private isSuccess(sessionStatus: SessionStatus): boolean {
+    return sessionStatus === SessionStatus.Success
+  }
+
+  private isFailed(sessionStatus: SessionStatus): boolean {
+    return sessionStatus === SessionStatus.Failed
+  }
+
+  private isCancelled(sessionStatus: SessionStatus): boolean {
+    return sessionStatus === SessionStatus.Ended
+        || sessionStatus === SessionStatus.Exited
+        || sessionStatus === SessionStatus.Killed
   }
 
   private get repositories(): Repository[] {
