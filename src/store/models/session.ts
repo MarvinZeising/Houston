@@ -23,13 +23,17 @@ export default class Session {
     })
 
     terminal.stderr.on('data', (data: any) => {
-      this.log += '<br>ERROR<br>' + data
+      this.log += '\n\rERROR' + data
       this.status = SessionStatus.Failed
     })
 
-    terminal.on('close', (code: string) => {
-      this.log += '<br>CLOSED WITH CODE ' + code
-      this.status = SessionStatus.Success
+    terminal.on('close', (code: number) => {
+      this.log += '\n\rCLOSED WITH CODE ' + code
+      if (code === 0) {
+        this.status = SessionStatus.Success
+      } else if (this.status !== SessionStatus.Killed) {
+        this.status = SessionStatus.Failed
+      }
     })
 
     terminal.on('disconnect', () => {
@@ -37,16 +41,16 @@ export default class Session {
     })
 
     terminal.on('exit', (code: number) => {
-      this.log += '<br>EXITED WITH CODE ' + code
+      this.log += '\n\rEXITED WITH CODE ' + code
       if (code === 0) {
         this.status = SessionStatus.Success
-      } else {
+      } else if (this.status !== SessionStatus.Killed) {
         this.status = SessionStatus.Failed
       }
     })
 
     terminal.on('error', (error: any) => {
-      this.log += '<br>ERROR<br>' + error
+      this.log += '\n\rERROR' + error
       this.status = SessionStatus.Failed
     })
   }
