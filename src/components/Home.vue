@@ -51,7 +51,14 @@
                   >
                     Kill
                   </v-btn>
-                  <v-card-text>
+                  <v-btn
+                    class="ma-3 grey"
+                    v-if="!isRunning(session.status)"
+                    v-on:click="repository.removeSession(session.pid)"
+                  >
+                    Remove
+                  </v-btn>
+                  <v-card-text style="overflow:auto;">
                     <pre>{{ session.log }}</pre>
                   </v-card-text>
                 </v-card>

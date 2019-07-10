@@ -5,11 +5,10 @@ import Task from '@/store/models/task'
 
 export default class Session {
 
+  public pid: number = 0
   public task: Task
   public status: SessionStatus = SessionStatus.None
   public log: string
-
-  private pid: number = 0
 
   constructor(path: string, task: Task) {
     const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', task.command])
