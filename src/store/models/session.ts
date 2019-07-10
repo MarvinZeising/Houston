@@ -13,8 +13,8 @@ export default class Session {
   constructor(path: string, command: string) {
     const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', command])
 
-    this.status = SessionStatus.InProgress
     this.pid = this.terminal.pid
+    this.status = SessionStatus.Running
     this.log = ''
 
     terminal.stdout.on('data', (data: any) => {
@@ -27,20 +27,20 @@ export default class Session {
     })
 
     terminal.on('close', (code: string) => {
-      if (this.status === SessionStatus.InProgress) {
+      if (this.status === SessionStatus.Running) {
         this.log += '<br>SUCCESS WITH CODE ' + code
         this.status = SessionStatus.Success
       }
     })
 
     terminal.on('disconnect', () => {
-      if (this.status === SessionStatus.InProgress) {
+      if (this.status === SessionStatus.Running) {
         this.status = SessionStatus.Ended
       }
     })
 
     terminal.on('exit', (code: any) => {
-      if (this.status === SessionStatus.InProgress) {
+      if (this.status === SessionStatus.Running) {
         this.status = SessionStatus.Exiting
       }
     })

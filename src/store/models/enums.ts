@@ -1,6 +1,6 @@
 enum SessionStatus {
   None,
-  InProgress,
+  Running,
   Exiting,
   Success,
   Error,
