@@ -1,6 +1,6 @@
-import Session from '@/store/modules/repositories'
 import uuidv4 from 'uuid/v4'
 import Task from '@/store/models/task'
+import Session from '@/store/models/session'
 
 export default class Repository {
 
