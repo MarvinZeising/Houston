@@ -1,20 +1,22 @@
 import { spawn } from 'child_process'
 import treeKill from 'tree-kill'
 import { SessionStatus } from '@/store/models/enums'
+import Task from '@/store/models/task'
 
 export default class Session {
 
+  public task: Task
   public status: SessionStatus = SessionStatus.None
-  public pid: number = 0
   public log: string
 
-  private terminal: any
+  private pid: number = 0
 
-  constructor(path: string, command: string) {
-    const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', command])
+  constructor(path: string, task: Task) {
+    const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', task.command])
 
-    this.pid = this.terminal.pid
+    this.task = task
     this.status = SessionStatus.Running
+    this.pid = terminal.pid
     this.log = ''
 
     terminal.stdout.on('data', (data: any) => {
