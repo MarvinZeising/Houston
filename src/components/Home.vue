@@ -1,13 +1,28 @@
 <template>
 
-  <v-container>
-    <v-layout wrap>
+  <v-container
+    fluid
+    grid-list-lg
+  >
+    <v-layout row wrap>
 
       <v-flex
+        xs12
         v-for="repository in repositories"
         :key="repository.id"
       >
-        <h1>{{ repository.name }}</h1>
+        <v-card>
+          <v-card-title primary-title>
+            <div class="headline">{{ repository.name }}</div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn
+              v-for="task in repository.tasks"
+              :key="task.id"
+              v-text="task.name"
+            />
+          </v-card-actions>
+        </v-card>
       </v-flex>
 
     </v-layout>
