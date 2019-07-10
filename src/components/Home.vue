@@ -46,6 +46,7 @@
                 <v-card class="grey darken-4">
                   <v-btn
                     class="ma-3 red"
+                    v-if="isStatusRunning(session.status)"
                     v-on:click="session.kill()"
                   >
                     Kill
@@ -72,10 +73,15 @@ import { getModule } from 'vuex-module-decorators'
 import Session from '@/store/models/session'
 import Repository from '@/store/models/repository'
 import RepositoryModule from '@/store/modules/repositories'
+import { SessionStatus } from '@/store/models/enums'
 
 @Component({})
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
+
+  private isStatusRunning(sessionStatus: SessionStatus): boolean {
+    return sessionStatus === SessionStatus.Running
+  }
 
   private get repositories(): Repository[] {
     return this.repositoryModule.getRepositories
