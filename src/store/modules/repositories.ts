@@ -16,6 +16,7 @@ export default class RepositoryModule extends VuexModule {
   public async initRepositoryModule() {
     const hub = new Repository('HuB', 'C:\\src\\HuB\\Admin', [
       new Task('Run Dev Server', TaskType.Continuous, '.\\ci.cmd rundevserver'),
+      new Task('Run Agent 3', TaskType.Definite, '.\\ci.cmd servertests 3'),
     ])
     const personMesh = new Repository('Person Mesh', 'C:\\src\\Mesh\\Person', [
       new Task('Run Service', TaskType.Continuous, 'cd .\\src\\JW.Mesh.Person.Service; dotnet watch run'),
