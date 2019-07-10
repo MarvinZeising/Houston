@@ -8,6 +8,12 @@ enum SessionStatus {
   Ended,
 }
 
+enum TaskType {
+  Continuous,
+  Definite,
+}
+
 export {
   SessionStatus,
+  TaskType,
 }
