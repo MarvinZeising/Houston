@@ -9,6 +9,7 @@ export default class Session {
   public task: Task
   public status: SessionStatus = SessionStatus.None
   public log: string
+  public errors: string[] = []
 
   constructor(path: string, task: Task) {
     const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', task.command])
@@ -18,12 +19,15 @@ export default class Session {
     this.pid = terminal.pid
     this.log = ''
 
-    terminal.stdout.on('data', (data: any) => {
+    terminal.stdout.on('data', (data: string) => {
       this.log += data
+      if ((/error/ig).test(data)) {
+        this.errors.push(data)
+      }
     })
 
     terminal.stderr.on('data', (data: any) => {
-      this.log += '\n\rERROR' + data
+      this.errors.push(data)
       this.status = SessionStatus.Failed
     })
 

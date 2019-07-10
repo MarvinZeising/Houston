@@ -28,7 +28,6 @@
               <v-expansion-panel-content
                 v-for="(session, i) in repository.sessions"
                 :key="i"
-                style-TO-BE-DELETED="background-color:#464775;"
                 class="grey darken-4"
               >
                 <template v-slot:header>
@@ -76,6 +75,19 @@
                   >
                     Remove
                   </v-btn>
+                  <v-card-text
+                    v-if="session.errors.length > 0"
+                    class="red--text"
+                    style="overflow:auto;"
+                  >
+                    <div
+                      v-for="(error, i) in session.errors"
+                      :key="i"
+                    >
+                      <div>ERROR {{ i }}:</div>
+                      <p><pre>{{ error }}</pre></p>
+                    </div>
+                  </v-card-text>
                   <v-card-text style="overflow:auto;">
                     <pre>{{ session.log }}</pre>
                   </v-card-text>
