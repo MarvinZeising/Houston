@@ -25,31 +25,30 @@ export default class Session {
 
     terminal.stderr.on('data', (data: any) => {
       this.log += '<br>ERROR<br>' + data
-      this.status = SessionStatus.Error
+      this.status = SessionStatus.Failed
     })
 
     terminal.on('close', (code: string) => {
-      if (this.status === SessionStatus.Running) {
-        this.log += '<br>SUCCESS WITH CODE ' + code
-        this.status = SessionStatus.Success
-      }
+      this.log += '<br>CLOSED WITH CODE ' + code
+      this.status = SessionStatus.Success
     })
 
     terminal.on('disconnect', () => {
-      if (this.status === SessionStatus.Running) {
-        this.status = SessionStatus.Ended
-      }
+      this.status = SessionStatus.Ended
     })
 
-    terminal.on('exit', (code: any) => {
-      if (this.status === SessionStatus.Running) {
-        this.status = SessionStatus.Exiting
+    terminal.on('exit', (code: number) => {
+      this.log += '<br>EXITED WITH CODE ' + code
+      if (code === 0) {
+        this.status = SessionStatus.Success
+      } else {
+        this.status = SessionStatus.Failed
       }
     })
 
     terminal.on('error', (error: any) => {
       this.log += '<br>ERROR<br>' + error
-      this.status = SessionStatus.Error
+      this.status = SessionStatus.Failed
     })
   }
 

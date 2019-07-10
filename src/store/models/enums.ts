@@ -1,11 +1,11 @@
 enum SessionStatus {
-  None,
-  Running,
-  Exiting,
-  Success,
-  Error,
-  Killed,
-  Ended,
+  None = 'None',
+  Running = 'Running',
+  Exited = 'Exited',
+  Success = 'Success',
+  Failed = 'Failed',
+  Killed = 'Killed',
+  Ended = 'Ended',
 }
 
 enum TaskType {
