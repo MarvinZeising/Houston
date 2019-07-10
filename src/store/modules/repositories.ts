@@ -15,28 +15,28 @@ export default class RepositoryModule extends VuexModule {
   @MutationAction({ mutate: ['repositories'] })
   public async initRepositoryModule() {
     const hub = new Repository('HuB', 'C:\\src\\HuB\\Admin', [
-      new Task('Start Server', TaskType.Continuous, '.\\ci.cmd rundevserver'),
+      new Task('Run Dev Server', TaskType.Continuous, '.\\ci.cmd rundevserver'),
     ])
     const personMesh = new Repository('Person Mesh', 'C:\\src\\Mesh\\Person', [
-      new Task('Start Service', TaskType.Continuous, 'cd .\\src\\JW.Mesh.Person.Service; dotnet watch run'),
-      new Task('Start Subscriber', TaskType.Continuous, 'cd .\\src\\JW.Mesh.Person.Subscriber; dotnet watch run'),
+      new Task('Run Service', TaskType.Continuous, 'cd .\\src\\JW.Mesh.Person.Service; dotnet watch run'),
+      new Task('Run Subscriber', TaskType.Continuous, 'cd .\\src\\JW.Mesh.Person.Subscriber; dotnet watch run'),
     ])
     return { repositories: [ hub, personMesh ] }
   }
 
   @Action({ commit: 'setRepositories' })
-  public async startSession({ repositoryId, taskId }: { repositoryId: string, taskId: string }) {
+  public startSession({ repositoryId, taskId }: { repositoryId: string, taskId: string }) {
     return this.repositories.map((repo: Repository) => {
       if (repo.id === repositoryId) {
         const task = repo.tasks.filter((t: Task) => t.id === taskId)[0]
-        repo.session = new Session(repo.path, task.command)
+        repo.sessions.push(new Session(repo.path, task))
       }
       return repo
     })
   }
 
   @Mutation
-  public async setRepositories(repositories: Repository[]) {
+  public setRepositories(repositories: Repository[]) {
     this.repositories = repositories
   }
 

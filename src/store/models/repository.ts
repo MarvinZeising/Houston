@@ -5,7 +5,7 @@ import Session from '@/store/models/session'
 export default class Repository {
 
   public id: string
-  public session: Session | null = null
+  public sessions: Session[] = []
 
   public name: string
   public path: string
