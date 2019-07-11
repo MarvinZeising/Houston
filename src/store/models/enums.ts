@@ -11,6 +11,7 @@ enum SessionStatus {
 enum TaskType {
   Continuous,
   Definite,
+  DefiniteWithNotifications,
 }
 
 export {
