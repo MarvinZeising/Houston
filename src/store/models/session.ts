@@ -1,15 +1,47 @@
 import { spawn } from 'child_process'
 import treeKill from 'tree-kill'
-import { SessionStatus } from '@/store/models/enums'
+import { SessionStatus, TaskType } from '@/store/models/enums'
 import Task from '@/store/models/task'
+import PushBullet from 'pushbullet'
 
 export default class Session {
 
   public pid: number = 0
   public task: Task
-  public status: SessionStatus = SessionStatus.None
   public log: string
   public errors: string[] = []
+
+  private sessionStatus: SessionStatus = SessionStatus.None
+
+  get status(): SessionStatus {
+    return this.sessionStatus
+  }
+
+  set status(value: SessionStatus) {
+    if (value === SessionStatus.Success &&
+        this.sessionStatus !== SessionStatus.Success &&
+        this.task.type === TaskType.DefiniteWithNotifications) {
+      const pusher = new PushBullet('o.b8EIjqMABd571hSjufwRaEImbuB1mrp6')
+      pusher.devices().then((response: any) => {
+        response.devices.forEach((device: any) => {
+          pusher.note(device.iden, this.task.name + ' succeeded', '')
+        })
+      })
+    }
+
+    if (value === SessionStatus.Failed &&
+        this.sessionStatus !== SessionStatus.Failed &&
+        this.task.type === TaskType.DefiniteWithNotifications) {
+      const pusher = new PushBullet('o.b8EIjqMABd571hSjufwRaEImbuB1mrp6')
+      pusher.devices().then((response: any) => {
+        response.devices.forEach((device: any) => {
+          pusher.note(device.iden, this.task.name + ' failed', this.errors.join('\n\r'))
+        })
+      })
+    }
+
+    this.sessionStatus = value
+  }
 
   constructor(path: string, task: Task) {
     const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', task.command])
