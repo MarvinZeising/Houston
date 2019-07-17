@@ -1,29 +1,15 @@
-# houston
+# Houston
 
-## Project setup
-```
-npm install
-```
+CLI for GUI enthusiasts
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Easily configurable
+ - currently in [this file](https://appsgit.bethel.jw.org/MZeising/houston/blob/master/src/store/modules/repositories.ts)
+ - soon by config file, hopefully
 
-### Compiles and minifies for production
-```
-npm run build
-```
+[Download Houston Installer](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/dist/Houston%20Setup%200.1.0.exe)
 
-### Run your tests
-```
-npm run test
-```
+# What it looks like
 
-### Lints and fixes files
-```
-npm run lint
-```
+![houston-1](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/public/houston-1.jpg)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![houston-2](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/public/houston-2.jpg)
