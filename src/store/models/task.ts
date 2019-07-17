@@ -5,14 +5,19 @@ export default class Task {
 
   public id: string
   public name: string
-  public command: string
   public type: TaskType
+  public command: string
+  public commandFunc?: (input: string) => string
 
-  constructor(name: string, type: TaskType, command: string) {
+  constructor(name: string, type: TaskType, command: string, commandFunc?: (input: string) => string) {
     this.id = uuidv4()
     this.name = name
-    this.command = command
     this.type = type
+    this.command = command
+
+    if (commandFunc) {
+      this.commandFunc = commandFunc
+    }
   }
 
 }

@@ -17,10 +17,17 @@
           </v-card-title>
           <v-card-actions>
             <v-btn
-              v-for="task in repository.tasks"
+              v-for="task in repository.tasks.filter((t) => t.command)"
               :key="task.id"
               v-text="task.name"
               v-on:click="startSession(repository.id, task.id)"
+            />
+            <Prompt
+              v-for="task in repository.tasks.filter((t) => !t.command)"
+              :key="task.id"
+              :name="task.name"
+              :repositoryId="repository.id"
+              :taskId="task.id"
             />
           </v-card-actions>
           <v-card-text v-if="repository.sessions.length > 0">
@@ -104,15 +111,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import Vue from 'vue'
+import Component from 'vue-class-component'
 import { spawn, exec } from 'child_process'
 import { getModule } from 'vuex-module-decorators'
 import Session from '@/store/models/session'
 import Repository from '@/store/models/repository'
 import RepositoryModule from '@/store/modules/repositories'
 import { SessionStatus } from '@/store/models/enums'
+import Prompt from '@/components/Prompt.vue'
 
-@Component({})
+@Component({
+  components: {
+    Prompt,
+  },
+})
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
 

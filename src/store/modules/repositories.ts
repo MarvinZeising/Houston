@@ -26,10 +26,15 @@ export default class RepositoryModule extends VuexModule {
   }
 
   @Action({ commit: 'setRepositories' })
-  public startSession({ repositoryId, taskId }: { repositoryId: string, taskId: string }) {
+  public startSession({ repositoryId, taskId, input }: { repositoryId: string, taskId: string, input?: string }) {
     return this.repositories.map((repo: Repository) => {
       if (repo.id === repositoryId) {
         const task = repo.tasks.filter((t: Task) => t.id === taskId)[0]
+
+        if (input && task.commandFunc) {
+          task.command = task.commandFunc(input)
+        }
+
         repo.sessions.push(new Session(repo.path, task))
       }
       return repo
