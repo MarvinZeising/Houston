@@ -11,6 +11,30 @@ export default class Session {
   public log: string
   public errors: string[] = []
 
+  // tslint:disable: max-line-length
+  public lib: string = `
+    function sca {
+        $cosmosDbStopped = $null -eq (Get-Process CosmosDB.Emulator -ErrorAction SilentlyContinue);
+        $azureStorageEmulatorStopped = $null -eq (Get-Process AzureStorageEmulator -ErrorAction SilentlyContinue);
+
+        $cosmosDbStart = "&'C:\\Program Files\\Azure Cosmos DB Emulator\\CosmosDB.Emulator.exe'";
+        $azureStorageEmulatorStart = "&'C:\\Program Files (x86)\\Microsoft SDKs\\Azure\\Storage Emulator\\AzureStorageEmulator.exe' start";
+
+        if ($azureStorageEmulatorStopped -AND $cosmosDbStopped)
+        {
+            Start-Process powershell -Verb RunAs -ArgumentList "-NoExit; $cosmosDbStart; $azureStorageEmulatorStart"
+        }
+        elseif ($azureStorageEmulatorStopped)
+        {
+            Start-Process powershell -Verb RunAs -ArgumentList "-NoExit; $azureStorageEmulatorStart"
+        }
+        elseif ($cosmosDbStopped)
+        {
+            Start-Process powershell -Verb RunAs -ArgumentList "-NoExit; $cosmosDbStartCommand"
+        }
+    };
+  `
+
   private sessionStatus: SessionStatus = SessionStatus.None
 
   get status(): SessionStatus {
@@ -44,7 +68,7 @@ export default class Session {
   }
 
   constructor(path: string, task: Task) {
-    const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', task.command])
+    const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', this.lib + task.command])
 
     this.task = task
     this.status = SessionStatus.Running
