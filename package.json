@@ -1,7 +1,11 @@
 {
-  "name": "houston",
+  "name": "Houston",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Marvin Zeising",
+    "email": "marvin.zeising@gmail.com"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
