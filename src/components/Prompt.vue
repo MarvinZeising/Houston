@@ -56,18 +56,20 @@ import { Prop } from 'vue-property-decorator'
 export default class Prompt extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
 
-  @Prop(Number) private readonly repositoryId: string = ''
-  @Prop(Number) private readonly taskId: string = ''
+  @Prop(String) private readonly repositoryId?: string
+  @Prop(String) private readonly taskId?: string
 
   private dialog: boolean = false
   private input: string = ''
 
   private save() {
-    this.repositoryModule.startSession({
-      repositoryId: this.repositoryId,
-      taskId: this.taskId,
-      input: this.input,
-    })
+    if (this.repositoryId && this.taskId) {
+      this.repositoryModule.startSession({
+        repositoryId: this.repositoryId,
+        taskId: this.taskId,
+        input: this.input,
+      })
+    }
 
     this.dialog = false
   }
