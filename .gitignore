@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-/dist
 
 # local env files
 .env.local
@@ -20,5 +19,10 @@ yarn-error.log*
 *.sln
 *.sw?
 
-#Electron-builder output
-/dist_electron
+# electron-builder output
+/dist/bundled
+/dist/win-unpacked
+/dist/*.yaml
+/dist/*.blockmap
+/dist/*.js
+/dist/*.json
