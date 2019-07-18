@@ -4,6 +4,9 @@ module.exports = {
       appId: 'com.marvinzeising.houston',
       productName: 'Houston',
       outputDir: 'dist',
-    }
-  }
+    },
+  },
+  configureWebpack: {
+    devtool: 'source-map',
+  },
 }
