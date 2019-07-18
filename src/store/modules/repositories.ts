@@ -1,6 +1,6 @@
 import { Module, VuexModule, MutationAction, Action, Mutation } from 'vuex-module-decorators'
 import Repository from '@/store/models/repository'
-import { TaskType } from '../models/enums'
+import { TaskType, SessionStatus } from '../models/enums'
 import Task from '@/store/models/task'
 import Session from '@/store/models/session'
 
@@ -67,9 +67,43 @@ export default class RepositoryModule extends VuexModule {
     })
   }
 
+  @Action({})
+  public async killAllSessions() {
+    for (const repo of this.repositories) {
+      for (const session of repo.sessions) {
+        session.kill()
+      }
+    }
+
+    let hasOpenSessions: boolean = true
+
+    do {
+      hasOpenSessions = this.repositories.map((repo: Repository) => {
+        const openSessions = repo.sessions.filter((session: Session) => {
+          return session.status === SessionStatus.Running
+        })
+        return openSessions.length > 0
+      }).includes(true)
+
+      if (hasOpenSessions) {
+        await wait(100)
+      }
+    } while (hasOpenSessions)
+
+    return true
+  }
+
   @Mutation
   public setRepositories(repositories: Repository[]) {
     this.repositories = repositories
   }
 
+}
+
+function wait(timeout: number) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, timeout)
+  })
 }
