@@ -8,6 +8,29 @@
 
       <v-flex
         xs12
+        class="ma-2 error"
+        v-if="repositories.length === 0"
+      >
+        No repositories configured. Check your config file at ~/houston.config
+      </v-flex>
+
+      <v-btn
+        class="ma-2 primary"
+        v-on:click="reloadConfig"
+      >
+        Reload config
+      </v-btn>
+
+      <v-btn
+        class="ma-2 red"
+        v-if="repositories.length > 0"
+        v-on:click="killAll"
+      >
+        Kill All
+      </v-btn>
+
+      <v-flex
+        xs12
         v-for="repository in repositories"
         :key="repository.id"
       >
@@ -120,6 +143,7 @@ import Repository from '@/store/models/repository'
 import RepositoryModule from '@/store/modules/repositories'
 import { SessionStatus } from '@/store/models/enums'
 import Prompt from '@/components/Prompt.vue'
+import { loadConfig } from '@/store/tools/configurator'
 
 @Component({
   components: {
@@ -128,6 +152,14 @@ import Prompt from '@/components/Prompt.vue'
 })
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
+
+  private async killAll() {
+    await this.repositoryModule.killAllSessions()
+  }
+
+  private async reloadConfig() {
+    loadConfig()
+  }
 
   private isRunning(sessionStatus: SessionStatus): boolean {
     return sessionStatus === SessionStatus.Running
