@@ -12,6 +12,15 @@ export default class RepositoryModule extends VuexModule {
     return this.repositories
   }
 
+  public get hasOpenSessions(): boolean {
+    return this.repositories.map((repo: Repository) => {
+      const openSessions = repo.sessions.filter((session: Session) => {
+        return session.status === SessionStatus.Running
+      })
+      return openSessions.length > 0
+    }).includes(true)
+  }
+
   @Action({})
   public async initRepositoryModule(config: any) {
     await this.context.dispatch('killAllSessions')
@@ -75,20 +84,9 @@ export default class RepositoryModule extends VuexModule {
       }
     }
 
-    let hasOpenSessions: boolean = true
-
-    do {
-      hasOpenSessions = this.repositories.map((repo: Repository) => {
-        const openSessions = repo.sessions.filter((session: Session) => {
-          return session.status === SessionStatus.Running
-        })
-        return openSessions.length > 0
-      }).includes(true)
-
-      if (hasOpenSessions) {
-        await wait(100)
-      }
-    } while (hasOpenSessions)
+    while (this.hasOpenSessions) {
+      await wait(100)
+    }
 
     return true
   }
