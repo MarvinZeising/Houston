@@ -63,14 +63,11 @@ export default class Prompt extends Vue {
   private input: string = ''
 
   private save() {
-    if (this.repositoryId && this.taskId) {
-      this.repositoryModule.startSession({
-        repositoryId: this.repositoryId,
-        taskId: this.taskId,
-        input: this.input,
-      })
-    }
+    if (this.repository && this.task && this.task.commandFunc) {
+      this.task.command = this.task.commandFunc(this.input)
 
+      this.repository.startSession(this.task)
+    }
     this.dialog = false
   }
 

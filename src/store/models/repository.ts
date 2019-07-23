@@ -18,6 +18,10 @@ export default class Repository {
     this.tasks = tasks
   }
 
+  public startSession(task: Task) {
+    this.sessions.push(new Session(this.path, task))
+  }
+
   public removeSession(pid: number) {
     this.sessions = this.sessions.filter((session) => session.pid !== pid)
   }
