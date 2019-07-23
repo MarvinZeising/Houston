@@ -21,14 +21,6 @@
         Reload config
       </v-btn>
 
-      <v-btn
-        class="ma-2 red"
-        v-if="repositories.length > 0"
-        v-on:click="killAll"
-      >
-        Kill All
-      </v-btn>
-
       <v-flex
         xs12
         v-for="repository in repositories"
@@ -160,10 +152,6 @@ import { loadConfig } from '@/store/tools/configurator'
 })
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
-
-  private async killAll() {
-    await this.repositoryModule.killAllSessions()
-  }
 
   private async reloadConfig() {
     loadConfig()
