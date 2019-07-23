@@ -51,7 +51,7 @@ export default class RepositoryModule extends VuexModule {
             task.name,
             TaskType[taskTypeString],
             '',
-            (input: string) => task.commandFunc.replace(/{name}/g, input))
+            (input: string) => task.commandFunc.replace(/{input}/g, input))
         }
       })
       return new Repository(repo.name, repo.path, tasks)
