@@ -1,15 +1,31 @@
 # Houston
 
-CLI for GUI enthusiasts
+CLI for dummies (like me)
 
-Easily configurable
- - currently in [this file](https://appsgit.bethel.jw.org/MZeising/houston/blob/master/src/store/modules/repositories.ts)
- - soon by config file, hopefully
+Easily configurable via a config file (`~/houston.config`) that has to look like this:
 
-[Download Houston Installer](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/dist/Houston%20Setup%200.1.0.exe)
+```json
+[
+  {
+    "name": "My-awesome-repository",
+    "path": "/path/to/repo",
+    "tasks": [
+      {
+        "name": "Compile and run",
+        "type": "definiteWithNotification",
+        "command": "./compile.sh; ./run.sh;"
+      }
+    ]
+  }
+]
+```
+
+Can send notifications via PushBullet as soon as a task is done.
+
+[Download Houston Installer](https://github.com/MarvinZeising/Houston/raw/master/dist/Houston%20Setup%200.1.0.exe)
 
 # What it looks like
 
-![houston-1](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/public/houston-1.jpg)
+![houston-1](https://github.com/MarvinZeising/Houston/raw/master/public/houston-1.jpg)
 
-![houston-2](https://appsgit.bethel.jw.org/MZeising/houston/raw/master/public/houston-2.jpg)
+![houston-2](https://github.com/MarvinZeising/Houston/raw/master/public/houston-2.jpg)
