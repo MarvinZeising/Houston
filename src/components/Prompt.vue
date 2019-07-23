@@ -5,7 +5,7 @@
     max-width="200px"
   >
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on">{{ name }}</v-btn>
+      <v-btn v-on="on">{{ task.name }}</v-btn>
     </template>
     <v-card>
       <v-card-text>
@@ -44,20 +44,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import RepositoryModule from '@/store/modules/repositories'
-import { getModule } from 'vuex-module-decorators'
 import { Prop } from 'vue-property-decorator'
+import Repository from '@/store/models/repository'
+import Task from '@/store/models/task'
 
-@Component({
-  props: {
-    name: String,
-  },
-})
+@Component({})
 export default class Prompt extends Vue {
-  private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
-
-  @Prop(String) private readonly repositoryId?: string
-  @Prop(String) private readonly taskId?: string
+  @Prop(Repository) private readonly repository?: Repository
+  @Prop(Task) private readonly task?: Task
 
   private dialog: boolean = false
   private input: string = ''
