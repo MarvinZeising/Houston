@@ -55,9 +55,11 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { SessionStatus } from '@/store/models/enums'
 import Session from '@/store/models/session'
+import Repository from '../store/models/repository'
 
 @Component({})
 export default class SessionBody extends Vue {
+  @Prop(Repository) private repository?: Repository
   @Prop(Session) private session?: Session
 
   private isRunning(sessionStatus: SessionStatus): boolean {

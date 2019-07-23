@@ -19,7 +19,10 @@
             <SessionHeader :session="session" />
           </template>
 
-          <SessionBody :session="session" />
+          <SessionBody
+            :repository="repository"
+            :session="session"
+          />
 
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -38,6 +41,7 @@ import Prompt from '@/components/Prompt.vue'
 import SessionHeader from '@/components/SessionHeader.vue'
 import SessionBody from '@/components/SessionBody.vue'
 import RepositoryActions from '@/components/RepositoryActions.vue'
+import RepositoryModule from '../store/modules/repositories'
 
 @Component({
   components: {
