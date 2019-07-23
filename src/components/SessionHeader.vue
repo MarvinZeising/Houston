@@ -28,7 +28,7 @@
     </span>
     {{ session.task.name }}
     <v-chip
-      v-if="isRunning(session.status)"
+      v-if="!isKilled(session.status)"
       label
       :class="session.lastLog.type === 'log' ? 'primary' : 'error'"
     >
@@ -65,6 +65,10 @@ export default class SessionHeader extends Vue {
     return sessionStatus === SessionStatus.Ended
         || sessionStatus === SessionStatus.Exited
         || sessionStatus === SessionStatus.Killed
+  }
+
+  private isKilled(sessionStatus: SessionStatus): boolean {
+    return sessionStatus === SessionStatus.Killed
   }
 
 }
