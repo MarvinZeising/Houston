@@ -107,7 +107,7 @@
                   <v-card-text
                     v-if="session.errors.length > 0"
                     class="red--text"
-                    style="overflow:auto;"
+                    style="overflow:auto; max-height:300px;"
                   >
                     <div
                       v-for="(error, i) in session.errors"
@@ -117,7 +117,7 @@
                       <p><pre>{{ error }}</pre></p>
                     </div>
                   </v-card-text>
-                  <v-card-text style="overflow:auto;">
+                  <v-card-text style="overflow:auto; max-height:300px;">
                     <pre>{{ session.log }}</pre>
                   </v-card-text>
                 </v-card>
