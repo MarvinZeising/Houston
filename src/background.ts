@@ -32,9 +32,7 @@ function createWindow() {
     win.loadURL('app://./index.html')
   }
 
-  win.on('closed', () => {
-    win = null
-  })
+  win.on('close', (e) => e.preventDefault())
 }
 
 // Quit when all windows are closed.
