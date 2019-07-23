@@ -62,8 +62,7 @@
               >
                 <template v-slot:header>
                   <div>
-                    {{ session.task.name }}
-                    <span class="ml-3">
+                    <span class="mr-3">
                       <v-progress-circular
                         v-if="isRunning(session.status)"
                         color="primary"
@@ -88,6 +87,14 @@
                         cancel
                       </v-icon>
                     </span>
+                    {{ session.task.name }}
+                    <v-chip
+                      v-if="isRunning(session.status)"
+                      label
+                      :class="session.lastLog.type === 'log' ? 'primary' : 'error'"
+                    >
+                      {{ session.lastLog.msg }}
+                    </v-chip>
                   </div>
                 </template>
                 <v-card class="grey darken-4">

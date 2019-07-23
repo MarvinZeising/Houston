@@ -10,6 +10,10 @@ export default class Session {
   public task: Task
   public log: string
   public errors: string[] = []
+  public lastLog: { msg: string, type: 'log' | 'error' } = {
+    msg: 'Waiting for process to start...',
+    type: 'log',
+  }
 
   // tslint:disable: max-line-length
   public lib: string = `
@@ -75,16 +79,19 @@ export default class Session {
     this.pid = terminal.pid
     this.log = ''
 
-    terminal.stdout.on('data', (data: string) => {
+    terminal.stdout.on('data', (data: any) => {
       this.log += data
       if ((/error/ig).test(data)) {
         this.errors.push(data)
+        this.lastLog.type = 'error'
       }
+      this.lastLog.msg = data.toString().trim()
     })
 
     terminal.stderr.on('data', (data: any) => {
       this.errors.push(data)
       this.status = SessionStatus.Failed
+      this.lastLog.msg = data.toString().trim()
     })
 
     terminal.on('close', (code: number) => {
