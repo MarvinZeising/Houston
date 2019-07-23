@@ -25,55 +25,13 @@
           :key="i"
           class="grey darken-4"
         >
+
           <template v-slot:header>
             <SessionHeader :session="session" />
           </template>
-          <v-card class="grey darken-4">
-            <v-btn
-              class="ma-3 red"
-              v-if="isRunning(session.status)"
-              v-on:click="session.kill()"
-            >
-              Kill
-            </v-btn>
-            <v-btn
-              class="ma-3 grey"
-              v-if="!isRunning(session.status)"
-              v-on:click="repository.removeSession(session.pid)"
-            >
-              Remove
-            </v-btn>
-            <v-btn
-              class="ma-3 grey"
-              v-if="session.log !== ''"
-              v-on:click="session.log = ''"
-            >
-              Clear logs
-            </v-btn>
-            <v-btn
-              class="ma-3 grey"
-              v-if="session.errors.length > 0"
-              v-on:click="session.errors = []"
-            >
-              Clear errors
-            </v-btn>
-            <v-card-text
-              v-if="session.errors.length > 0"
-              class="red--text"
-              style="overflow:auto; max-height:300px;"
-            >
-              <div
-                v-for="(error, i) in session.errors"
-                :key="i"
-              >
-                <div>ERROR {{ i }}:</div>
-                <p><pre>{{ error }}</pre></p>
-              </div>
-            </v-card-text>
-            <v-card-text style="overflow:auto; max-height:300px;">
-              <pre>{{ session.log }}</pre>
-            </v-card-text>
-          </v-card>
+
+          <SessionBody :session="session" />
+
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-card-text>
@@ -88,20 +46,17 @@ import { Prop } from 'vue-property-decorator'
 import Repository from '@/store/models/repository'
 import { SessionStatus } from '@/store/models/enums'
 import Prompt from '@/components/Prompt.vue'
-import SessionHeader from './SessionHeader.vue'
+import SessionHeader from '@/components/SessionHeader.vue'
+import SessionBody from '@/components/SessionBody.vue'
 
 @Component({
   components: {
     Prompt,
     SessionHeader,
+    SessionBody,
   },
 })
 export default class RepositoryCard extends Vue {
   @Prop(Repository) private repository?: Repository
-
-  private isRunning(sessionStatus: SessionStatus): boolean {
-    return sessionStatus === SessionStatus.Running
-  }
-
 }
 </script>
