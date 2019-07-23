@@ -26,41 +26,7 @@
           class="grey darken-4"
         >
           <template v-slot:header>
-            <div>
-              <span class="mr-3">
-                <v-progress-circular
-                  v-if="isRunning(session.status)"
-                  color="primary"
-                  indeterminate
-                ></v-progress-circular>
-                <v-icon
-                  v-if="isSuccess(session.status)"
-                  color="teal"
-                >
-                  done
-                </v-icon>
-                <v-icon
-                  v-if="isFailed(session.status)"
-                  color="error"
-                >
-                  error
-                </v-icon>
-                <v-icon
-                  v-if="isCancelled(session.status)"
-                  color="grey"
-                >
-                  cancel
-                </v-icon>
-              </span>
-              {{ session.task.name }}
-              <v-chip
-                v-if="isRunning(session.status)"
-                label
-                :class="session.lastLog.type === 'log' ? 'primary' : 'error'"
-              >
-                {{ session.lastLog.msg }}
-              </v-chip>
-            </div>
+            <SessionHeader :session="session" />
           </template>
           <v-card class="grey darken-4">
             <v-btn
@@ -119,14 +85,15 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
-import Session from '@/store/models/session'
 import Repository from '@/store/models/repository'
 import { SessionStatus } from '@/store/models/enums'
 import Prompt from '@/components/Prompt.vue'
+import SessionHeader from './SessionHeader.vue'
 
 @Component({
   components: {
     Prompt,
+    SessionHeader,
   },
 })
 export default class RepositoryCard extends Vue {
@@ -134,20 +101,6 @@ export default class RepositoryCard extends Vue {
 
   private isRunning(sessionStatus: SessionStatus): boolean {
     return sessionStatus === SessionStatus.Running
-  }
-
-  private isSuccess(sessionStatus: SessionStatus): boolean {
-    return sessionStatus === SessionStatus.Success
-  }
-
-  private isFailed(sessionStatus: SessionStatus): boolean {
-    return sessionStatus === SessionStatus.Failed
-  }
-
-  private isCancelled(sessionStatus: SessionStatus): boolean {
-    return sessionStatus === SessionStatus.Ended
-        || sessionStatus === SessionStatus.Exited
-        || sessionStatus === SessionStatus.Killed
   }
 
 }
