@@ -104,6 +104,20 @@
                   >
                     Remove
                   </v-btn>
+                  <v-btn
+                    class="ma-3 grey"
+                    v-if="session.log !== ''"
+                    v-on:click="session.log = ''"
+                  >
+                    Clear logs
+                  </v-btn>
+                  <v-btn
+                    class="ma-3 grey"
+                    v-if="session.errors.length > 0"
+                    v-on:click="session.errors = []"
+                  >
+                    Clear errors
+                  </v-btn>
                   <v-card-text
                     v-if="session.errors.length > 0"
                     class="red--text"
