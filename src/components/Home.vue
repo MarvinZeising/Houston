@@ -154,18 +154,6 @@ import { loadConfig } from '@/store/tools/configurator'
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
 
-  constructor() {
-    super()
-
-    remote.getCurrentWindow().on('close', (e) => {
-      if (this.repositoryModule.hasOpenSessions) {
-        this.repositoryModule.killAllSessions().then(() => remote.app.exit())
-      } else {
-        remote.app.exit()
-      }
-    })
-  }
-
   private async killAll() {
     await this.repositoryModule.killAllSessions()
   }

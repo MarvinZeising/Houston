@@ -3,6 +3,7 @@ import { homedir } from 'os'
 import { getModule } from 'vuex-module-decorators'
 import store from '@/store'
 import RepositoryModule from '@/store/modules/repositories'
+import { remote } from 'electron'
 
 function loadConfig() {
   const repositoryModule = getModule(RepositoryModule, store)
@@ -17,4 +18,16 @@ function loadConfig() {
   })
 }
 
-export { loadConfig }
+function setupWindowCloser() {
+  const repositoryModule = getModule(RepositoryModule, store)
+
+  remote.getCurrentWindow().on('close', () => {
+    if (repositoryModule.hasOpenSessions) {
+      repositoryModule.killAllSessions().then(() => remote.app.exit())
+    } else {
+      remote.app.exit()
+    }
+  })
+}
+
+export { loadConfig, setupWindowCloser }
