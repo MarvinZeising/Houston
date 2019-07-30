@@ -25,7 +25,7 @@
     <v-btn
       class="ma-3 grey"
       v-if="session.errors.length > 0"
-      v-on:click="session.errors = []"
+      v-on:click="session.clearErrors()"
     >
       Clear errors
     </v-btn>

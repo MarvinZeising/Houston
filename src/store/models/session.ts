@@ -122,6 +122,11 @@ export default class Session {
     })
   }
 
+  public clearErrors() {
+    this.errors = []
+    this.lastLog.type = 'error'
+  }
+
   public kill() {
     if (this.pid > 0) {
       treeKill(this.pid, 'SIGINT', () => {
