@@ -7,6 +7,8 @@ import { remote } from 'electron'
 
 const configPath: string = homedir() + '/houston.config'
 
+let library: string = ''
+
 function loadConfig() {
   const repositoryModule = getModule(RepositoryModule, store)
 
@@ -15,7 +17,16 @@ function loadConfig() {
       repositoryModule.initRepositoryModule([])
     } else {
       const config = JSON.parse(data)
-      repositoryModule.initRepositoryModule(config)
+
+      if (Object.keys(config).includes('repositories')) {
+        repositoryModule.initRepositoryModule(config.repositories)
+      } else {
+        repositoryModule.initRepositoryModule([])
+      }
+
+      if (Object.keys(config).includes('library')) {
+        library = config.library.join(' ')
+      }
     }
   })
 }
@@ -32,4 +43,4 @@ function setupWindowCloser() {
   })
 }
 
-export { configPath, loadConfig, setupWindowCloser }
+export { configPath, library, loadConfig, setupWindowCloser }
