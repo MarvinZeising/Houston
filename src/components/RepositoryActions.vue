@@ -6,7 +6,12 @@
         v-for="category in repository.categories"
         :key="category.id"
       >
-        <p class="mt-2 mb-0 ml-1">{{ category.name }}</p>
+        <p
+          v-if="category.name !== ''"
+          class="mt-2 mb-0 ml-1"
+        >
+          {{ category.name }}
+        </p>
         <v-btn
           v-for="task in category.tasks.filter((t) => t.command)"
           :key="task.id"
