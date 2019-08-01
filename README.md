@@ -8,12 +8,18 @@ Easily configurable via a config file (`~/houston.config`) that has to look like
 [
   {
     "name": "My-awesome-repository",
-    "path": "/path/to/repo",
-    "tasks": [
+    "path": "\\path\\to\\repo",
+    "categories": [
       {
-        "name": "Compile and run",
-        "type": "definiteWithNotification",
-        "command": "./compile.sh; ./run.sh;"
+        "name": "Compile tasks",
+        "tasks": [
+          {
+            "name": "Compile and run",
+            "color": "primary",
+            "type": "definiteWithNotification",
+            "command": "./compile.sh; ./run.sh;"
+          }
+        ]
       }
     ]
   }
