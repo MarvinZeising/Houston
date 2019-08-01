@@ -124,7 +124,10 @@ export default class Session {
 
   public clearErrors() {
     this.errors = []
-    this.lastLog.type = 'error'
+    this.lastLog = {
+      type: 'log',
+      msg: '',
+    }
   }
 
   public kill() {
