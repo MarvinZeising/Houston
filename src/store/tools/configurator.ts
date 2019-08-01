@@ -5,10 +5,12 @@ import store from '@/store'
 import RepositoryModule from '@/store/modules/repositories'
 import { remote } from 'electron'
 
+const configPath: string = homedir() + '/houston.config'
+
 function loadConfig() {
   const repositoryModule = getModule(RepositoryModule, store)
 
-  fs.readFile(homedir() + '/houston.config', (err: any, data: any) => {
+  fs.readFile(configPath, (err: any, data: any) => {
     if (err) {
       repositoryModule.initRepositoryModule([])
     } else {
@@ -30,4 +32,4 @@ function setupWindowCloser() {
   })
 }
 
-export { loadConfig, setupWindowCloser }
+export { configPath, loadConfig, setupWindowCloser }

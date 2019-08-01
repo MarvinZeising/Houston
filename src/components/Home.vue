@@ -11,7 +11,7 @@
         class="ma-2 error"
         v-if="repositories.length === 0"
       >
-        No repositories configured. Check your config file at ~/houston.config
+        No repositories configured. Check your config file at {{ configPath }}
       </v-flex>
 
       <v-btn
@@ -38,7 +38,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getModule } from 'vuex-module-decorators'
-import { loadConfig } from '@/store/tools/configurator'
+import { loadConfig, configPath } from '@/store/tools/configurator'
 import Repository from '@/store/models/repository'
 import RepositoryModule from '@/store/modules/repositories'
 import RepositoryCard from '@/components/RepositoryCard.vue'
@@ -50,6 +50,7 @@ import RepositoryCard from '@/components/RepositoryCard.vue'
 })
 export default class Home extends Vue {
   private repositoryModule: RepositoryModule = getModule(RepositoryModule, this.$store)
+  private configPath: string = configPath
 
   private async reloadConfig() {
     loadConfig()
