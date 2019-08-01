@@ -18,7 +18,7 @@
     <v-btn
       class="ma-3 grey"
       v-if="session.log !== ''"
-      v-on:click="session.log = ''"
+      v-on:click="session.clearLogs()"
     >
       Clear logs
     </v-btn>

@@ -122,6 +122,14 @@ export default class Session {
     })
   }
 
+  public clearLogs() {
+    this.log = ''
+    this.lastLog = {
+      type: 'log',
+      msg: '',
+    }
+  }
+
   public clearErrors() {
     this.errors = []
     this.lastLog = {
