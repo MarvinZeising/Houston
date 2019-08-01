@@ -5,7 +5,12 @@
     max-width="200px"
   >
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on">{{ task.name }}</v-btn>
+      <v-btn
+        v-on="on"
+        :color="task.color"
+      >
+        {{ task.name }}
+      </v-btn>
     </template>
     <v-card>
       <v-card-text>

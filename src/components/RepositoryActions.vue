@@ -6,6 +6,7 @@
       :key="task.id"
       v-text="task.name"
       v-on:click="repository.startSession(task)"
+          :color="task.color"
     />
     <Prompt
       v-for="task in repository.tasks.filter((t) => !t.command)"
