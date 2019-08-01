@@ -1,7 +1,10 @@
 <template>
 
-  <v-card>
-    <v-card-title primary-title>
+  <v-card class="pa-2">
+    <v-card-title
+      primary-title
+      class="pt-2 pb-0 pl-1"
+    >
       <h1 class="headline">{{ repository.name }}</h1>
     </v-card-title>
 

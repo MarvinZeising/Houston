@@ -1,19 +1,28 @@
 <template>
 
   <v-card-actions>
-    <v-btn
-      v-for="task in repository.tasks.filter((t) => t.command)"
-      :key="task.id"
-      v-text="task.name"
-      v-on:click="repository.startSession(task)"
+    <v-layout column>
+      <div
+        v-for="category in repository.categories"
+        :key="category.id"
+      >
+        <p class="mt-2 mb-0 ml-1">{{ category.name }}</p>
+        <v-btn
+          v-for="task in category.tasks.filter((t) => t.command)"
+          :key="task.id"
+          v-text="task.name"
+          v-on:click="repository.startSession(task)"
           :color="task.color"
-    />
-    <Prompt
-      v-for="task in repository.tasks.filter((t) => !t.command)"
-      :key="task.id"
-      :repository="repository"
-      :task="task"
-    />
+          class="ma-1"
+        />
+        <Prompt
+          v-for="task in category.tasks.filter((t) => !t.command)"
+          :key="task.id"
+          :repository="repository"
+          :task="task"
+        />
+      </div>
+    </v-layout>
   </v-card-actions>
 
 </template>

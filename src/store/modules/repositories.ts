@@ -3,6 +3,7 @@ import Repository from '@/store/models/repository'
 import { TaskType, SessionStatus } from '@/store/models/enums'
 import Task from '@/store/models/task'
 import Session from '@/store/models/session'
+import Category from '../models/category'
 
 @Module({ name: 'RepositoryModule' })
 export default class RepositoryModule extends VuexModule {
@@ -25,36 +26,53 @@ export default class RepositoryModule extends VuexModule {
   public async initRepositoryModule(config: any) {
     await this.context.dispatch('killAllSessions')
 
-    const repositories: Repository[] = config
-    .filter((repo: any) => {
-      const neededKeys = ['name', 'path', 'tasks'].sort().join(',')
-      const repoKeys = Object.keys(repo).sort().join(',')
-      return neededKeys === repoKeys
-    })
-    .map((repo: any) => {
-      const tasks = repo.tasks
-      .filter((task: any) => {
-        const taskKeys = Object.keys(task)
-        const typeKeys = Object.keys(TaskType).map((t: string) => t.toLowerCase())
+    const validRepositories: any[] = config.filter((r: any) => hasKeys(r, ['name', 'path', 'categories']))
 
-        return taskKeys.includes('name') && taskKeys.includes('type') &&
-          (taskKeys.includes('command') || taskKeys.includes('commandFunc')) &&
-          typeKeys.includes(task.type.toLowerCase())
-      })
-      .map((task: any) => {
-        const taskTypeString = task.type as keyof typeof TaskType
+    const repositories: Repository[] = validRepositories.map((repo: {
+      name: string,
+      path: string,
+      categories: any[],
+    }) => {
+      const validCategories: any[] = repo.categories.filter((c: any) => hasKeys(c, ['name', 'tasks']))
 
-        if (task.command) {
-          return new Task(task.name, TaskType[taskTypeString], task.command)
-        } else {
-          return new Task(
-            task.name,
-            TaskType[taskTypeString],
-            '',
-            (input: string) => task.commandFunc.replace(/{input}/g, input))
-        }
+      const categories: Category[] = validCategories.map((category: {
+        name: string,
+        tasks: any[],
+      }) => {
+        const validTasks: any[] = category.tasks.filter((task: any) => {
+            const taskKeys = Object.keys(task)
+            const typeKeys = Object.keys(TaskType).map((t: string) => t.toLowerCase())
+
+            return taskKeys.includes('name') && taskKeys.includes('type') &&
+              (taskKeys.includes('command') || taskKeys.includes('commandFunc')) &&
+              typeKeys.includes(task.type.toLowerCase())
+          })
+
+        const tasks: Task[] = validTasks.map((task: {
+          name: string,
+          color: string,
+          type: keyof typeof TaskType,
+          command?: string,
+          commandFunc: string,
+        }) => {
+          const taskTypeString = task.type as keyof typeof TaskType
+
+          if (task.command) {
+            return new Task(task.name, task.color, TaskType[taskTypeString], task.command)
+          } else {
+            return new Task(
+              task.name,
+              task.color,
+              TaskType[taskTypeString],
+              '',
+              (input: string) => task.commandFunc.replace(/{input}/g, input))
+          }
+        })
+
+        return new Category(category.name, tasks)
       })
-      return new Repository(repo.name, repo.path, tasks)
+
+      return new Repository(repo.name, repo.path, categories)
     })
 
     this.context.commit('setRepositories', repositories)
@@ -88,4 +106,10 @@ function wait(timeout: number) {
       resolve()
     }, timeout)
   })
+}
+
+function hasKeys(object: any, keys: string[]) {
+  const neededKeys = keys.sort().join(',')
+  const objectKeys = Object.keys(object).sort().join(',')
+  return neededKeys === objectKeys
 }

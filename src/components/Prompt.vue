@@ -8,6 +8,7 @@
       <v-btn
         v-on="on"
         :color="task.color"
+        class="ma-1"
       >
         {{ task.name }}
       </v-btn>
