@@ -5,27 +5,31 @@ import store from '@/store'
 import RepositoryModule from '@/store/modules/repositories'
 import { remote } from 'electron'
 
-const configPath: string = homedir() + '/houston.config'
-
-let library: string = ''
+const configuration: {
+  path: string,
+  library: string,
+} = {
+  path: homedir() + '/houston.config',
+  library: '',
+}
 
 function loadConfig() {
   const repositoryModule = getModule(RepositoryModule, store)
 
-  fs.readFile(configPath, (err: any, data: any) => {
+  fs.readFile(configuration.path, (err: any, data: any) => {
     if (err) {
       repositoryModule.initRepositoryModule([])
     } else {
-      const config = JSON.parse(data)
+      const fileContent = JSON.parse(data)
 
-      if (Object.keys(config).includes('repositories')) {
-        repositoryModule.initRepositoryModule(config.repositories)
+      if (Object.keys(fileContent).includes('repositories')) {
+        repositoryModule.initRepositoryModule(fileContent.repositories)
       } else {
         repositoryModule.initRepositoryModule([])
       }
 
-      if (Object.keys(config).includes('library')) {
-        library = config.library.join(' ')
+      if (Object.keys(fileContent).includes('library')) {
+        configuration.library = fileContent.library.join(' ')
       }
     }
   })
@@ -43,4 +47,4 @@ function setupWindowCloser() {
   })
 }
 
-export { configPath, library, loadConfig, setupWindowCloser }
+export { configuration, loadConfig, setupWindowCloser }

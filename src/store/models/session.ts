@@ -3,7 +3,7 @@ import treeKill from 'tree-kill'
 import { SessionStatus, TaskType } from '@/store/models/enums'
 import Task from '@/store/models/task'
 import PushBullet from 'pushbullet'
-import { library } from '@/store/tools/configurator'
+import { configuration } from '@/store/tools/configurator'
 
 export default class Session {
 
@@ -49,7 +49,10 @@ export default class Session {
   }
 
   constructor(path: string, task: Task) {
-    const terminal = spawn('pwsh.exe', ['-WorkingDirectory', path, '-Command', library + task.command])
+    const terminal = spawn('pwsh.exe', [
+      '-WorkingDirectory', path,
+      '-Command', configuration.library + task.command,
+    ])
 
     this.task = task
     this.status = SessionStatus.Running
