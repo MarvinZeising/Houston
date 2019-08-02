@@ -23,10 +23,10 @@ export default class RepositoryModule extends VuexModule {
   }
 
   @Action({})
-  public async initRepositoryModule(config: any) {
+  public async initRepositoryModule(rawRepositories: any) {
     await this.context.dispatch('killAllSessions')
 
-    const validRepositories: any[] = config.filter((r: any) => hasKeys(r, ['name', 'path', 'categories']))
+    const validRepositories: any[] = rawRepositories.filter((r: any) => hasKeys(r, ['name', 'path', 'categories']))
 
     const repositories: Repository[] = validRepositories.map((repo: {
       name: string,
@@ -55,15 +55,13 @@ export default class RepositoryModule extends VuexModule {
           command?: string,
           commandFunc: string,
         }) => {
-          const taskTypeString = task.type as keyof typeof TaskType
-
           if (task.command) {
-            return new Task(task.name, task.color, TaskType[taskTypeString], task.command)
+            return new Task(task.name, task.color, task.type as TaskType, task.command)
           } else {
             return new Task(
               task.name,
               task.color,
-              TaskType[taskTypeString],
+              task.type as TaskType,
               '',
               (input: string) => task.commandFunc.replace(/{input}/g, input))
           }

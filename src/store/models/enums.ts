@@ -9,9 +9,9 @@ enum SessionStatus {
 }
 
 enum TaskType {
-  Continuous,
-  Definite,
-  DefiniteWithNotifications,
+  Continuous = 'continuous',
+  Definite = 'definite',
+  DefiniteWithNotifications = 'definiteWithNotifications',
 }
 
 export {
