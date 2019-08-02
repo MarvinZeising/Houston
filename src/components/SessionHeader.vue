@@ -28,11 +28,11 @@
     </span>
     {{ session.task.name }}
     <v-chip
-      v-if="!isKilled(session.status)"
+      v-if="!isKilled(session.status) && (session.overview.lastLog || session.overview.lastError)"
       label
-      :class="session.lastLog.type === 'log' ? 'primary' : 'error'"
+      :class="session.overview.lastError === '' ? 'primary' : 'error'"
     >
-      {{ session.lastLog.msg }}
+      {{ session.overview.lastLog }}
     </v-chip>
   </div>
 

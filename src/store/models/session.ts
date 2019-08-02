@@ -5,15 +5,17 @@ import Task from '@/store/models/task'
 import PushBullet from 'pushbullet'
 import { configuration } from '@/store/tools/configurator'
 
+const defaultLog = 'Waiting for process to start...'
+
 export default class Session {
 
   public pid: number = 0
   public task: Task
   public log: string
   public errors: string[] = []
-  public lastLog: { msg: string, type: 'log' | 'error' } = {
-    msg: 'Waiting for process to start...',
-    type: 'log',
+  public overview: { lastLog: string, lastError: string } = {
+    lastLog: defaultLog,
+    lastError: '',
   }
 
   private sessionStatus: SessionStatus = SessionStatus.None
@@ -61,21 +63,24 @@ export default class Session {
 
     terminal.stdout.on('data', (data: any) => {
       this.log += data
+
       if ((/error/ig).test(data)) {
         this.errors.push(data)
-        this.lastLog.type = 'error'
+        this.overview.lastError = data.toString().trim()
+      } else {
+        this.overview.lastLog = data.toString().trim()
       }
-      this.lastLog.msg = data.toString().trim()
     })
 
     terminal.stderr.on('data', (data: any) => {
       this.errors.push(data)
       this.status = SessionStatus.Failed
-      this.lastLog.msg = data.toString().trim()
+      this.overview.lastError = data.toString().trim()
     })
 
     terminal.on('close', (code: number) => {
       this.log += '\n\rCLOSED WITH CODE ' + code
+
       if (code === 0) {
         this.status = SessionStatus.Success
       } else if (this.status !== SessionStatus.Killed) {
@@ -89,6 +94,7 @@ export default class Session {
 
     terminal.on('exit', (code: number) => {
       this.log += '\n\rEXITED WITH CODE ' + code
+
       if (code === 0) {
         this.status = SessionStatus.Success
       } else if (this.status !== SessionStatus.Killed) {
@@ -104,18 +110,12 @@ export default class Session {
 
   public clearLogs() {
     this.log = ''
-    this.lastLog = {
-      type: 'log',
-      msg: '',
-    }
+    this.overview.lastLog = ''
   }
 
   public clearErrors() {
     this.errors = []
-    this.lastLog = {
-      type: 'log',
-      msg: '',
-    }
+    this.overview.lastError = ''
   }
 
   public kill() {
