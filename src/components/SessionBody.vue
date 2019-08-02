@@ -1,6 +1,6 @@
 <template>
 
-  <v-card class="grey darken-4">
+  <div>
     <v-btn
       class="ma-3 red"
       v-if="isRunning(session.status)"
@@ -29,23 +29,23 @@
     >
       Clear errors
     </v-btn>
-    <v-card-text
+    <div
       v-if="session.errors.length > 0"
       class="red--text"
       style="overflow:auto; max-height:300px;"
     >
       <div
-        v-for="(error, i) in session.errors"
-        :key="i"
+        v-for="(error, index) in session.errors"
+        :key="index"
       >
-        <div>ERROR {{ i }}:</div>
+        <div>ERROR {{ index }}:</div>
         <p><pre>{{ error }}</pre></p>
       </div>
-    </v-card-text>
-    <v-card-text style="overflow:auto; max-height:300px;">
+    </div>
+    <div style="overflow:auto; max-height:300px;">
       <pre>{{ session.log }}</pre>
-    </v-card-text>
-  </v-card>
+    </div>
+  </div>
 
 </template>
 

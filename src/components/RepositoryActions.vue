@@ -1,36 +1,33 @@
 <template>
 
-  <v-card-actions>
-    <v-layout column>
-      <div
-        v-for="category in repository.categories"
-        :key="category.id"
-      >
-        <p
-          v-if="category.name !== ''"
-          class="mt-2 mb-0 ml-1"
-        >
-          {{ category.name }}
-        </p>
+  <div>
+    <div
+      v-for="category in repository.categories"
+      :key="category.id"
+    >
+      <v-card-text class="pt-0 pb-0">
+        <span v-if="category.name !== ''">{{ category.name }}</span>
+      </v-card-text>
+
+      <v-card-actions class="pl-4 pb-4">
         <v-btn
           v-for="task in category.tasks.filter((t) => t.command)"
           :key="task.id"
           v-on:click="repository.startSession(task)"
           :color="task.color"
-          class="ma-1"
         >
           {{ task.name }}
           <v-icon
             v-if="task.type === TaskType.DefiniteWithNotifications"
-            class="ml-2"
-            dark
+            class="mr-0"
+            right
           >
             announcement
           </v-icon>
           <v-icon
             v-if="task.type === TaskType.Continuous"
-            class="ml-2"
-            dark
+            class="mr-0"
+            right
           >
             update
           </v-icon>
@@ -41,9 +38,10 @@
           :repository="repository"
           :task="task"
         />
-      </div>
-    </v-layout>
-  </v-card-actions>
+      </v-card-actions>
+
+    </div>
+  </div>
 
 </template>
 
@@ -55,6 +53,7 @@ import Repository from '@/store/models/repository'
 import Prompt from '@/components/Prompt.vue'
 import { TaskType } from '@/store/models/enums'
 import Task from '@/store/models/task'
+import { setupWindowCloser } from '@/store/tools/configurator'
 
 @Component({
   components: {

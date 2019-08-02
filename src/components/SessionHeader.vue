@@ -1,40 +1,35 @@
 <template>
 
-  <div>
-    <span class="mr-3">
-      <v-progress-circular
-        v-if="isRunning(session.status)"
-        color="primary"
-        indeterminate
-      ></v-progress-circular>
-      <v-icon
-        v-if="isSuccess(session.status)"
-        color="teal"
-      >
-        done
-      </v-icon>
-      <v-icon
-        v-if="isFailed(session.status)"
-        color="error"
-      >
-        error
-      </v-icon>
-      <v-icon
-        v-if="isCancelled(session.status)"
-        color="grey"
-      >
-        cancel
-      </v-icon>
-    </span>
-    {{ session.task.name }}
-    <v-chip
-      v-if="!isKilled(session.status) && (session.overview.lastLog || session.overview.lastError)"
-      label
-      :class="session.overview.lastError === '' ? 'primary' : 'error'"
+  <v-tab class="ml-0">
+    <v-progress-circular
+      :size="22"
+      color="primary"
+      indeterminate
+      class="mr-3"
+    ></v-progress-circular>
+    <v-icon
+      v-if="isSuccess(session.status)"
+      color="teal"
+      left
     >
-      {{ session.overview.lastLog }}
-    </v-chip>
-  </div>
+      done
+    </v-icon>
+    <v-icon
+      v-if="isFailed(session.status)"
+      color="error"
+      left
+    >
+      error
+    </v-icon>
+    <v-icon
+      v-if="isCancelled(session.status)"
+      color="grey"
+      left
+    >
+      cancel
+    </v-icon>
+    {{ session.task.name }}
+  </v-tab>
 
 </template>
 
