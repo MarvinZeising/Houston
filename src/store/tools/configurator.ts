@@ -8,9 +8,13 @@ import { remote } from 'electron'
 const configuration: {
   path: string,
   library: string,
+  pushedKey: string,
+  pushedSecret: string,
 } = {
   path: homedir() + '/houston.config',
   library: '',
+  pushedKey: '',
+  pushedSecret: '',
 }
 
 function loadConfig() {
@@ -30,6 +34,12 @@ function loadConfig() {
 
       if (Object.keys(fileContent).includes('library')) {
         configuration.library = fileContent.library.join(' ')
+      }
+
+      if (Object.keys(fileContent).includes('pushedKey') &&
+          Object.keys(fileContent).includes('pushedSecret')) {
+        configuration.pushedKey = fileContent.pushedKey
+        configuration.pushedSecret = fileContent.pushedSecret
       }
     }
   })

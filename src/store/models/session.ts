@@ -2,8 +2,8 @@ import { spawn } from 'child_process'
 import treeKill from 'tree-kill'
 import { SessionStatus, TaskType } from '@/store/models/enums'
 import Task from '@/store/models/task'
-import PushBullet from 'pushbullet'
 import { configuration } from '@/store/tools/configurator'
+import { pushNotification } from '../tools/notifications'
 
 const defaultLog = 'Waiting for process to start...'
 
@@ -25,26 +25,16 @@ export default class Session {
   }
 
   set status(value: SessionStatus) {
-    if (value === SessionStatus.Success &&
-        this.sessionStatus !== SessionStatus.Success &&
-        this.task.type === TaskType.DefiniteWithNotifications) {
-      const pusher = new PushBullet('o.b8EIjqMABd571hSjufwRaEImbuB1mrp6')
-      pusher.devices().then((response: any) => {
-        response.devices.forEach((device: any) => {
-          pusher.note(device.iden, this.task.name + ' succeeded', '')
-        })
-      })
+    const firstSuccess = value === SessionStatus.Success && this.sessionStatus !== SessionStatus.Success
+
+    if (firstSuccess && this.task.type === TaskType.DefiniteWithNotifications) {
+      pushNotification(this.task.name + ' succeeded')
     }
 
-    if (value === SessionStatus.Failed &&
-        this.sessionStatus !== SessionStatus.Failed &&
-        this.task.type === TaskType.DefiniteWithNotifications) {
-      const pusher = new PushBullet('o.b8EIjqMABd571hSjufwRaEImbuB1mrp6')
-      pusher.devices().then((response: any) => {
-        response.devices.forEach((device: any) => {
-          pusher.note(device.iden, this.task.name + ' failed', this.errors.join('\n\r'))
-        })
-      })
+    const firstFail = value === SessionStatus.Failed && this.sessionStatus !== SessionStatus.Failed
+
+    if (firstFail && this.task.type === TaskType.DefiniteWithNotifications) {
+      pushNotification(this.task.name + ' failed (' + this.errors.join(';;;') + ')')
     }
 
     this.sessionStatus = value
