@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <v-expansion-panel-content class="grey darken-4">
     <v-btn
       class="ma-3 red"
       v-if="isRunning(session.status)"
@@ -45,7 +45,7 @@
     <div style="overflow:auto; max-height:300px;">
       <pre>{{ session.log }}</pre>
     </div>
-  </div>
+  </v-expansion-panel-content>
 
 </template>
 

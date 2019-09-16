@@ -1,35 +1,43 @@
 <template>
 
-  <v-tab class="ml-0">
-    <v-progress-circular
-      :size="22"
-      color="primary"
-      indeterminate
-      class="mr-3"
-    ></v-progress-circular>
-    <v-icon
-      v-if="isSuccess(session.status)"
-      color="teal"
-      left
-    >
-      done
-    </v-icon>
-    <v-icon
-      v-if="isFailed(session.status)"
-      color="error"
-      left
-    >
-      error
-    </v-icon>
-    <v-icon
-      v-if="isCancelled(session.status)"
-      color="grey"
-      left
-    >
-      cancel
-    </v-icon>
+  <v-expansion-panel-header disable-icon-rotate>
     {{ session.task.name }}
-  </v-tab>
+
+    <template v-slot:actions>
+
+      <v-progress-circular
+        v-if="isRunning(session.status)"
+        :size="22"
+        color="primary"
+        indeterminate
+        class="mr-3"
+      ></v-progress-circular>
+
+      <v-icon
+        v-if="isSuccess(session.status)"
+        color="teal"
+        left
+      >
+        done
+      </v-icon>
+      <v-icon
+        v-if="isFailed(session.status)"
+        color="error"
+        left
+      >
+        error
+      </v-icon>
+      <v-icon
+        v-if="isCancelled(session.status)"
+        color="grey"
+        left
+      >
+        cancel
+      </v-icon>
+
+    </template>
+
+  </v-expansion-panel-header>
 
 </template>
 
