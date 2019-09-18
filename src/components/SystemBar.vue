@@ -1,7 +1,7 @@
 <template>
 
   <v-system-bar app fixed window>
-    <v-spacer></v-spacer>
+    <div class="flex container item" style="-webkit-app-region: drag" />
     <v-btn
       text small tile
       @click="window.minimize()"
