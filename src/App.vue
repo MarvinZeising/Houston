@@ -5,7 +5,7 @@
 
       <SystemBar />
 
-      <v-content>
+      <v-content style="max-height:100%; overflow:scroll;">
         <Home />
       </v-content>
 
