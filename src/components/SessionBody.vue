@@ -31,19 +31,22 @@
     </v-btn>
     <div
       v-if="session.errors.length > 0"
-      class="red--text"
-      style="overflow:auto; max-height:300px;"
+      class="caption red--text inline-block"
+      style="overflow:scroll; max-height:300px;"
     >
       <div
         v-for="(error, index) in session.errors"
         :key="index"
       >
         <div>ERROR {{ index }}:</div>
-        <p><pre>{{ error }}</pre></p>
+        <p><pre style="max-width:0;">{{ error }}</pre></p>
       </div>
     </div>
-    <div style="overflow:auto; max-height:300px;">
-      <pre>{{ session.log }}</pre>
+    <div
+      class="caption inline"
+      style="overflow:scroll; max-height:300px;"
+    >
+      <pre style="max-width:0;">{{ session.log }}</pre>
     </div>
   </v-expansion-panel-content>
 
