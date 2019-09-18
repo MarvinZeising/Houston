@@ -52,18 +52,18 @@ export default class Session {
     this.log = ''
 
     terminal.stdout.on('data', (data: any) => {
-      this.log += data
+      this.log += data.toString().trimRight()
 
       if ((/error/ig).test(data)) {
-        this.errors.push(data)
+        this.errors.push(data.toString().trimRight())
         this.overview.lastError = data.toString().trim()
       } else {
-        this.overview.lastLog = data.toString().trim()
+        this.setLastLog(data.toString().trim())
       }
     })
 
     terminal.stderr.on('data', (data: any) => {
-      this.errors.push(data)
+      this.errors.push(data.toString().trimRight())
       this.status = SessionStatus.Failed
       this.overview.lastError = data.toString().trim()
     })
@@ -109,6 +109,10 @@ export default class Session {
 
     while (lastLog.indexOf('==') > -1) {
       lastLog = lastLog.replace(/==/gi, '=')
+    }
+
+    if (lastLog.length > 200) {
+      lastLog = lastLog.substr(0, 200) + '...'
     }
 
     this.overview.lastLog = lastLog
