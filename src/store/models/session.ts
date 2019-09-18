@@ -98,6 +98,22 @@ export default class Session {
     })
   }
 
+  public setLastLog(lastLog: string) {
+    if (lastLog.includes('\n')) {
+      lastLog = lastLog.substr(lastLog.indexOf('\n'))
+    }
+
+    while (lastLog.indexOf('--') > -1) {
+      lastLog = lastLog.replace(/--/gi, '-')
+    }
+
+    while (lastLog.indexOf('==') > -1) {
+      lastLog = lastLog.replace(/==/gi, '=')
+    }
+
+    this.overview.lastLog = lastLog
+  }
+
   public clearLogs() {
     this.log = ''
     this.overview.lastLog = ''

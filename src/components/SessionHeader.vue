@@ -1,7 +1,7 @@
 <template>
 
   <v-expansion-panel-header disable-icon-rotate>
-    {{ session.task.name }}
+    {{ session.task.name }} ({{ session.overview.lastLog }})
 
     <template v-slot:actions>
 
