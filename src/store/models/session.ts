@@ -52,20 +52,24 @@ export default class Session {
     this.log = ''
 
     terminal.stdout.on('data', (data: any) => {
-      this.log += data.toString().trimRight()
+      const dataString = data.toString().replace(/ +$/g, '')
+
+      this.log += dataString
 
       if ((/error/ig).test(data)) {
-        this.errors.push(data.toString().trimRight())
-        this.overview.lastError = data.toString().trim()
+        this.errors.push(data)
+        this.overview.lastError = dataString.trim()
       } else {
-        this.setLastLog(data.toString().trim())
+        this.setLastLog(dataString.trim())
       }
     })
 
     terminal.stderr.on('data', (data: any) => {
-      this.errors.push(data.toString().trimRight())
+      const dataString = data.toString().replace(/ +$/g, '')
+
+      this.errors.push(dataString)
       this.status = SessionStatus.Failed
-      this.overview.lastError = data.toString().trim()
+      this.overview.lastError = data.trim()
     })
 
     terminal.on('close', (code: number) => {
