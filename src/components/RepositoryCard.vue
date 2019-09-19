@@ -16,11 +16,11 @@
         :key="session.pid"
       >
 
-        <SessionHeader :session="session" />
-        <SessionBody
+        <SessionHeader
           :repository="repository"
           :session="session"
         />
+        <SessionBody :session="session" />
 
       </v-expansion-panel>
     </v-expansion-panels>

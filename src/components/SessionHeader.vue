@@ -1,10 +1,8 @@
 <template>
 
   <v-expansion-panel-header disable-icon-rotate>
-    {{ session.task.name }} ({{ session.overview.lastLog }})
 
-    <template v-slot:actions>
-
+    <div>
       <v-progress-circular
         v-if="isRunning(session.status)"
         :size="22"
@@ -35,6 +33,28 @@
         cancel
       </v-icon>
 
+      {{ session.task.name }} ({{ session.overview.lastLog }})
+    </div>
+
+    <template v-slot:actions>
+
+      <v-btn
+        small
+        class="red"
+        v-if="isRunning(session.status)"
+        v-on:click.stop="session.kill()"
+      >
+        Kill
+      </v-btn>
+      <v-btn
+        small
+        class="grey"
+        v-if="!isRunning(session.status)"
+        v-on:click.stop="repository.removeSession(session.pid)"
+      >
+        Remove
+      </v-btn>
+
     </template>
 
   </v-expansion-panel-header>
@@ -46,10 +66,12 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import Session from '@/store/models/session'
+import Repository from '@/store/models/repository'
 import { SessionStatus } from '@/store/models/enums'
 
 @Component({})
 export default class SessionHeader extends Vue {
+  @Prop(Repository) private repository?: Repository
   @Prop(Session) private session?: Session
 
   private isRunning(sessionStatus: SessionStatus): boolean {
