@@ -33,7 +33,10 @@
         cancel
       </v-icon>
 
-      {{ session.task.name }} ({{ session.overview.lastLog }})
+      {{ session.task.name }}
+      <span v-if="session.overview.lastLog">
+        ({{ session.overview.lastLog }})
+      </span>
     </div>
 
     <template v-slot:actions>
