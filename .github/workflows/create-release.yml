@@ -1,0 +1,37 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'major | minor | patch'
+        required: true
+        default: patch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Bump versions
+        run: |
+          yarn version ${{ github.event.inputs.logLevel }}
+          cd api
+          yarn version ${{ github.event.inputs.logLevel }}
+      
+      - name: Read new version
+        uses: tyankatsu0105/read-package-version-actions@v1
+        id: package-version
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Create release
+          branch: master
+          commit_options: '--no-verify --signoff'
+          file_pattern: './package.json ./api/package.json'
+          tagging_message: 'v${{ steps.package-version.outputs.version }}'
+          push_options: '--force'
+          skip_dirty_check: true
+          skip_fetch: true
