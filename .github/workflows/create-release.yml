@@ -16,10 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Bump versions
-        run: |
-          yarn version --${{ github.event.inputs.logLevel }} --no-git-tag-version
-          cd api
-          yarn version --${{ github.event.inputs.logLevel }} --no-git-tag-version
+        run: yarn version --${{ github.event.inputs.logLevel }} --no-git-tag-version
       
       - name: Read new version
         uses: tyankatsu0105/read-package-version-actions@v1
