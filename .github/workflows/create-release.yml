@@ -27,7 +27,7 @@ jobs:
           commit_message: Create release
           branch: master
           commit_options: '--no-verify --signoff'
-          file_pattern: './package.json ./api/package.json'
+          file_pattern: './package.json'
           tagging_message: 'v${{ steps.package-version.outputs.version }}'
           push_options: '--force'
           skip_dirty_check: true
