@@ -17,9 +17,9 @@ jobs:
 
       - name: Bump versions
         run: |
-          yarn version ${{ github.event.inputs.logLevel }}
+          yarn version --new-version ${{ github.event.inputs.logLevel }}
           cd api
-          yarn version ${{ github.event.inputs.logLevel }}
+          yarn version --new-version ${{ github.event.inputs.logLevel }}
       
       - name: Read new version
         uses: tyankatsu0105/read-package-version-actions@v1
