@@ -3,10 +3,12 @@ name: Create Release
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
+      versionIncrement:
         description: 'major | minor | patch'
         required: true
         default: patch
+      description:
+        description: Changes in this Release
 
 jobs:
   build:
@@ -16,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Bump versions
-        run: yarn version --${{ github.event.inputs.logLevel }} --no-git-tag-version
+        run: yarn version --${{ github.event.inputs.versionIncrement }} --no-git-tag-version
       
       - name: Read new version
         uses: tyankatsu0105/read-package-version-actions@v1
@@ -32,3 +34,12 @@ jobs:
           push_options: '--force'
           skip_dirty_check: true
           skip_fetch: true
+      
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: 'v${{ steps.package-version.outputs.version }}'
+          release_name: v${{ steps.package-version.outputs.version }}
+          body: ${{ github.event.inputs.description }}
+          draft: false
+          prerelease: false
