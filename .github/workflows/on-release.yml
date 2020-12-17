@@ -1,0 +1,16 @@
+name: On Release created
+
+on:
+  release:
+    types: [published, created, edited]
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Hello
+        run: echo Hello
